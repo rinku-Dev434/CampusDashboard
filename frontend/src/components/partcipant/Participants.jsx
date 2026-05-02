@@ -100,7 +100,7 @@ export default function Participants() {
           ) : (
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
               <table className="table w-full text-center">
-                <thead className="bg-blue-100">
+                <thead className="bg-pink-100">
                   <tr>
                     <th className="p-4">Rank</th>
                     <th className="p-4">Name</th>
@@ -140,7 +140,7 @@ export default function Participants() {
                       </td>
 
                       {/* POINTS */}
-                      <td className="p-4 font-bold text-blue-600">
+                      <td className="p-4 font-bold text-pink-600">
                         {user.points ?? 0}
                       </td>
                     </tr>

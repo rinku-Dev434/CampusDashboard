@@ -10,8 +10,8 @@ const UserManual = () => {
       title: "Company-Wise Banks",
       desc: "Curated questions from top MNCs and startups.",
       icon: <Building2 size={18} />,
-      color: "text-blue-500",
-      bg: "bg-blue-50"
+      color: "text-pink-500",
+      bg: "bg-pink-50"
     },
     {
       title: "Subject-Wise Learning",

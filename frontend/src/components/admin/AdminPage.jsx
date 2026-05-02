@@ -291,9 +291,9 @@
 
 //               <button
 //                 onClick={handleUpdateExam}
-//                 className="flex-1 py-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600
+//                 className="flex-1 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-pink-600
 //                text-white font-semibold shadow-md hover:shadow-lg
-//                hover:from-green-600 hover:to-green-700 transition-all duration-200"
+//                hover:from-pink-600 hover:to-pink-700 transition-all duration-200"
 //               >
 //                 ✔ Update
 //               </button>
@@ -435,7 +435,7 @@ const AdminPage = () => {
         {/* ANALYTICS CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <StatCard
-            icon={<FileText className="text-blue-500" />}
+            icon={<FileText className="text-pink-500" />}
             label="Total Exams"
             value={stats.totalExams}
           />

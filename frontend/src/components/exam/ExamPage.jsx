@@ -1,313 +1,3 @@
-// import { useEffect, useState } from "react";
-// import { useParams, useNavigate, Link } from "react-router-dom";
-// import { useCookies } from "react-cookie";
-// import API_BASE from "../../api.js";
-// import Navbar from "../Navbar.jsx";
-// import Footer from "../Footer.jsx";
-
-// export default function ExamPage() {
-//   const { testId } = useParams();
-//   const navigate = useNavigate();
-//   const [cookies] = useCookies(["username"]);
-
-//   const [questions, setQuestions] = useState([]);
-//   const [examTitle, setExamTitle] = useState("");
-//   const [answers, setAnswers] = useState({});
-//   const [submitted, setSubmitted] = useState(false);
-//   const [score, setScore] = useState(0);
-//   const [loading, setLoading] = useState(true);
-//   const [timeLeft, setTimeLeft] = useState(null);
-
-//   useEffect(() => {
-//     fetch(`${API_BASE}/tests/${testId}`)
-//       .then((r) => r.json())
-//       .then((data) => {
-//         setQuestions(data.questionset || []);
-//         setExamTitle(data.title || "Exam");
-//         setTimeLeft((data.questionset?.length || 10) * 90);
-//         setLoading(false);
-//       })
-//       .catch(() => setLoading(false));
-//   }, [testId]);
-
-//   useEffect(() => {
-//     if (submitted || timeLeft === null) return;
-//     if (timeLeft <= 0) { handleSubmit(); return; }
-//     const t = setTimeout(() => setTimeLeft((prev) => prev - 1), 1000);
-//     return () => clearTimeout(t);
-//   }, [timeLeft, submitted]);
-
-//   const formatTime = (secs) => {
-//     const m = Math.floor(secs / 60).toString().padStart(2, "0");
-//     const s = (secs % 60).toString().padStart(2, "0");
-//     return `${m}:${s}`;
-//   };
-
-//   const isCorrect = (q, userAns) => {
-//     if (q.qtype === "nat") {
-//       return userAns?.trim().toLowerCase() === q.correct[0]?.trim().toLowerCase();
-//     }
-//     if (q.qtype === "mcq") {
-//       return userAns === q.correct[0];
-//     }
-//     if (q.qtype === "msq") {
-//       const a = userAns || [];
-//       return a.length === q.correct.length && a.every((x) => q.correct.includes(x));
-//     }
-//     return false;
-//   };
-
-//   const handleSubmit = async () => {
-//     if (submitted) return;
-//     let sc = 0;
-
-//     questions.forEach((q, i) => {
-//       if (isCorrect(q, answers[i])) sc++;
-//     });
-
-//     setScore(sc);
-//     setSubmitted(true);
-
-//     try {
-//       await fetch(`${API_BASE}/update-points`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ username: cookies.username, points: sc }),
-//       });
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center">
-//         <span className="loading loading-spinner loading-lg text-pink-500"></span>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <>
-//       <Navbar />
-
-//       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
-
-//         {/* HEADER */}
-//         <div className="max-w-5xl mx-auto mt-20 px-4 py-4 flex justify-between items-center bg-white/70 backdrop-blur-md rounded-xl shadow-md border border-gray-200">
-//           <h1 className="text-xl md:text-2xl font-bold text-gray-800">
-//             🎯 Best of Luck! <span className="text-pink-600">do your best</span>
-//           </h1>
-
-//           {!submitted && timeLeft !== null && (
-//             <span className={`font-mono text-lg font-bold px-4 py-1 rounded-xl ${
-//               timeLeft < 60 ? "bg-red-500 text-white animate-pulse" : "bg-blue-600 text-white"
-//             }`}>
-//               ⏱ {formatTime(timeLeft)}
-//             </span>
-//           )}
-//         </div>
-
-//         <div className="max-w-3xl mx-auto px-4 py-8">
-//           {questions.map((q, i) => {
-//             const userAns = answers[i];
-//             const correct = isCorrect(q, userAns);
-
-//             return (
-//               <div
-//                 key={i}
-//                 className={`rounded-xl p-5 mb-6 shadow-sm border-2
-//                   ${
-//                     submitted
-//                       ? userAns === undefined
-//                         ? "bg-red-50 border-red-400"
-//                         : correct
-//                         ? "bg-green-50 border-green-400"
-//                         : "bg-red-50 border-red-400"
-//                       : "bg-white border-blue-200"
-//                   }`}
-//               >
-//                 <p className="font-bold mb-4">
-//                   Q{i + 1}. {q.q}
-//                 </p>
-
-//                 {/* NOT ATTEMPTED */}
-//                 {submitted && userAns === undefined && (
-//                   <p className="text-red-600 font-semibold text-sm mb-2">
-//                     ❌ Not Attempted
-//                   </p>
-//                 )}
-
-//                 {/* NAT */}
-//                 {q.qtype === "nat" && (
-//                   <>
-//                     <input
-//                       type="text"
-//                       className="input input-bordered w-full"
-//                       disabled={submitted}
-//                       value={userAns || ""}
-//                       onChange={(e) =>
-//                         setAnswers((p) => ({ ...p, [i]: e.target.value }))
-//                       }
-//                     />
-
-//                     {submitted && !correct && (
-//                       <p className="mt-2 text-green-700 font-semibold">
-//                         ✅ Correct Answer: {q.correct[0]}
-//                       </p>
-//                     )}
-//                   </>
-//                 )}
-
-//                 {/* MCQ */}
-//                 {q.qtype === "mcq" &&
-//                   q.options.map((opt, idx) => {
-//                     const isCorrectOpt = idx === q.correct[0];
-//                     const isSelected = userAns === idx;
-
-//                     let cls = "flex items-center gap-3 p-3 rounded-lg border mb-2 ";
-
-//                     if (submitted) {
-//                       if (isCorrectOpt) cls += "border-green-400 bg-green-50";
-//                       else if (isSelected) cls += "border-red-400 bg-red-50";
-//                       else cls += "border-gray-200";
-//                     } else {
-//                       cls += isSelected
-//                         ? "border-pink-400 bg-pink-50"
-//                         : "border-gray-200 hover:bg-pink-50";
-//                     }
-
-//                     return (
-//                       <label key={idx} className={cls}>
-//                         <input
-//                           type="radio"
-//                           disabled={submitted}
-//                           checked={isSelected}
-//                           onChange={() =>
-//                             setAnswers((p) => ({ ...p, [i]: idx }))
-//                           }
-//                         />
-//                         {opt}
-//                       </label>
-//                     );
-//                   })}
-
-//                 {submitted && !correct && q.qtype === "mcq" && (
-//                   <p className="text-green-700 font-semibold">
-//                     ✅ Correct Answer: {q.options[q.correct[0]]}
-//                   </p>
-//                 )}
-
-//                 {/* MSQ */}
-//                 {q.qtype === "msq" &&
-//                   q.options.map((opt, idx) => {
-//                     const selected = userAns?.includes(idx);
-//                     const correctOpt = q.correct.includes(idx);
-
-//                     let cls = "flex items-center gap-3 p-3 rounded-lg border mb-2 ";
-
-//                     if (submitted) {
-//                       if (correctOpt) cls += "border-green-400 bg-green-50";
-//                       else if (selected) cls += "border-red-400 bg-red-50";
-//                       else cls += "border-gray-200";
-//                     } else {
-//                       cls += selected
-//                         ? "border-pink-400 bg-pink-50"
-//                         : "border-gray-200 hover:bg-pink-50";
-//                     }
-
-//                     return (
-//                       <label key={idx} className={cls}>
-//                         <input
-//                           type="checkbox"
-//                           disabled={submitted}
-//                           checked={selected || false}
-//                           onChange={() => {
-//                             const arr = userAns || [];
-//                             setAnswers((p) => ({
-//                               ...p,
-//                               [i]: arr.includes(idx)
-//                                 ? arr.filter((x) => x !== idx)
-//                                 : [...arr, idx],
-//                             }));
-//                           }}
-//                         />
-//                         {opt}
-//                       </label>
-//                     );
-//                   })}
-
-//                 {submitted && !correct && q.qtype === "msq" && (
-//                   <p className="text-green-700 font-semibold">
-//                     ✅ Correct Answer: {q.correct.map((c) => q.options[c]).join(", ")}
-//                   </p>
-//                 )}
-//               </div>
-//             );
-//           })}
-
-//           {/* BUTTONS */}
-//           <div className="flex gap-4 justify-center mt-6">
-            
-
-//             {!submitted && (
-//               <button onClick={handleSubmit} className="btn bg-blue-600 text-white">
-//                 Submit
-//               </button>
-//             )}
-//           </div>
-
-          
-//           {/* Score card */}
-//             {submitted && (
-//               <div className="mt-8 bg-white border-2 border-green-400 rounded-2xl p-8 text-center shadow-lg">
-//                 <h2 className="text-3xl font-bold text-gray-800">
-//                   Your Score: <span className="text-green-500">{score}</span> / {questions.length}
-//                 </h2>
-//                 <p className="text-gray-500 mt-2">
-//                   {score === questions.length
-//                     ? "🎉 Perfect score! Excellent work!"
-//                     : score >= questions.length * 0.7
-//                     ? "👏 Great job! Keep it up!"
-//                     : score >= questions.length * 0.4
-//                     ? "📚 Good effort! Study more and retry."
-//                     : "💪 Keep practicing! You'll do better next time."}
-//                 </p>
-//                 <p className="text-sm text-gray-400 mt-1">
-//                   Points have been added to your leaderboard score.
-//                 </p>
-//                 <div className="flex gap-4 justify-center mt-6">
-//                   <Link to="/home" className="btn bg-pink-500 hover:bg-pink-600 text-white">
-//                     Home
-//                   </Link>
-//                   <Link to="/participants" className="btn btn-outline border-pink-400 text-pink-500">
-//                     View Leaderboard
-//                   </Link>
-//                 </div>
-//               </div>
-//             )}
-//         </div>
-//       </div>
-
-//       <Footer />
-//     </>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -319,7 +9,7 @@ import Footer from "../Footer.jsx";
 export default function ExamPage() {
   const { testId } = useParams();
   const navigate = useNavigate();
-  const [cookies] = useCookies(["username"]);
+  const [cookies] = useCookies(["username" , "role"]);
 
   const [questions, setQuestions] = useState([]);
   const [examTitle, setExamTitle] = useState("");
@@ -395,9 +85,10 @@ export default function ExamPage() {
   setScore(sc);
   setSubmitted(true);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  const base = cookies.role === "admin" ? "admins" : "users";
 
   try {
-    await fetch(`${API_BASE}/users/${cookies.username}/points`, {
+    await fetch(`${API_BASE}/${base}/${cookies.username}/points`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -464,7 +155,7 @@ export default function ExamPage() {
                 id={`q-${i}`} 
                 className={`rounded-xl border p-5 transition-all scroll-mt-40 ${
                 submitted 
-                ? (userAns === undefined || !correct ? "bg-red-50/40 border-red-100" : "bg-green-50/40 border-green-100") 
+                ? (userAns === undefined || !correct ? "bg-red-50/40 border-red-100" : "bg-pink-50/40 border-pink-100") 
                 : "bg-white border-slate-200 shadow-sm hover:border-slate-300"
               }`}>
                 <div className="flex items-start gap-3">
@@ -486,7 +177,7 @@ export default function ExamPage() {
                           onChange={(e) => setAnswers((p) => ({ ...p, [i]: e.target.value }))}
                         />
                         {submitted && !correct && (
-                          <div className="mt-2 flex items-center gap-2 text-green-700">
+                          <div className="mt-2 flex items-center gap-2 text-pink-700">
                              <CheckCircle size={14} />
                              <p className="text-xs font-black uppercase">Correct Answer: {q.correct[0]}</p>
                           </div>
@@ -502,7 +193,7 @@ export default function ExamPage() {
 
                         let cls = "flex items-center gap-2 p-3 rounded-lg border text-xs font-bold transition-all cursor-pointer ";
                         if (submitted) {
-                          if (isCorrectOpt) cls += "border-green-500 bg-green-100 text-green-900 shadow-sm";
+                          if (isCorrectOpt) cls += "border-pink-500 bg-pink-100 text-pink-900 shadow-sm";
                           else if (isSelected) cls += "border-red-300 bg-red-50 text-red-800";
                           else cls += "border-slate-100 text-slate-400 opacity-60";
                         } else {
@@ -567,7 +258,7 @@ export default function ExamPage() {
                   return (
                     <a key={i} href={`#q-${i}`} className={`h-9 rounded-lg flex items-center justify-center text-[11px] font-black border transition-all
                         ${submitted 
-                          ? (isCorrect(questions[i], answers[i]) ? "bg-green-500 border-green-500 text-white" : "bg-red-500 border-red-500 text-white")
+                          ? (isCorrect(questions[i], answers[i]) ? "bg-pink-500 border-pink-500 text-white" : "bg-red-500 border-red-500 text-white")
                           : isAnswered ? "bg-slate-900 border-slate-900 text-white shadow-md" : "bg-white border-slate-200 text-slate-500 hover:border-slate-400"
                         }`}>
                       {i + 1}
@@ -583,10 +274,10 @@ export default function ExamPage() {
               )}
             </div>
 
-            <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+            <div className="p-4 bg-pink-50/50 rounded-xl border border-pink-100">
                <div className="flex gap-2">
-                  <AlertCircle size={14} className="text-blue-500 flex-shrink-0" />
-                  <p className="text-[10px] font-bold text-blue-700 uppercase leading-tight">
+                  <AlertCircle size={14} className="text-pink-500 flex-shrink-0" />
+                  <p className="text-[10px] font-bold text-pink-700 uppercase leading-tight">
                     Answers are saved locally. Do not refresh the page during the test.
                   </p>
                </div>

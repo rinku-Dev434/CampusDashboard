@@ -5,8 +5,8 @@ const topics = [
     id: "aptitude",
     label: "Aptitude",
     icon: "🧮",
-    color: "bg-blue-100 text-blue-700 border-blue-300",
-    activeColor: "bg-blue-500 text-white",
+    color: "bg-pink-100 text-pink-700 border-pink-300",
+    activeColor: "bg-pink-500 text-white",
     chapters: [
       {
         title: "Number System",
@@ -132,8 +132,8 @@ const topics = [
     id: "english",
     label: "English",
     icon: "📝",
-    color: "bg-green-100 text-green-700 border-green-300",
-    activeColor: "bg-green-500 text-white",
+    color: "bg-pink-100 text-pink-700 border-pink-300",
+    activeColor: "bg-pink-500 text-white",
     chapters: [
       {
         title: "Grammar Essentials",
@@ -431,7 +431,7 @@ export default function StudySection() {
                 <div key={i} className="border border-pink-200 rounded-xl p-4 bg-pink-50">
                   <p className="font-semibold text-gray-800 mb-3">Q{i + 1}: {item.q}</p>
                   {revealedAnswers[i] ? (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-green-800 text-sm">
+                    <div className="bg-pink-50 border border-pink-200 rounded-lg p-3 text-pink-800 text-sm">
                       ✅ <strong>Answer:</strong> {item.a}
                     </div>
                   ) : (
@@ -462,8 +462,8 @@ export default function StudySection() {
             </ul>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
-            <h4 className="font-bold text-blue-700 mb-2">📋 Quick Stats</h4>
+          <div className="bg-pink-50 border border-pink-200 rounded-2xl p-5">
+            <h4 className="font-bold text-pink-700 mb-2">📋 Quick Stats</h4>
             <p className="text-sm text-gray-600">Chapters: <span className="font-bold">{topic.chapters.length}</span></p>
             <p className="text-sm text-gray-600">Practice Qs: <span className="font-bold">{topic.practice.length}</span></p>
             <p className="text-sm text-gray-600 mt-3 leading-relaxed">
@@ -472,7 +472,7 @@ export default function StudySection() {
             <a
               href="https://www.codingshuttle.com/mock-tests/"
               onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}
-              className="mt-3 block btn btn-sm bg-blue-500 hover:bg-blue-600 text-white text-center"
+              className="mt-3 block btn btn-sm bg-pink-500 hover:bg-pink-600 text-white text-center"
             >
               Go to Exam →
             </a>

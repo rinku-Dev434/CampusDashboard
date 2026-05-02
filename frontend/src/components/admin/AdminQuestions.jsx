@@ -255,7 +255,7 @@ const AdminQuestions = () => {
                       <input
                         type="text"
                         placeholder={`Option ${i + 1}`}
-                        className={`input input-bordered w-full pr-12 ${newQ.correct.includes(i) ? "border-green-500 bg-green-50" : ""}`}
+                        className={`input input-bordered w-full pr-12 ${newQ.correct.includes(i) ? "border-pink-500 bg-pink-50" : ""}`}
                         value={opt}
                         onChange={(e) => {
                           const updated = [...newQ.options];
@@ -271,7 +271,7 @@ const AdminQuestions = () => {
                           setNewQ({ ...newQ, correct: updated });
                         }}
                         className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md transition-colors ${
-                          newQ.correct.includes(i) ? "bg-green-500 text-white" : "bg-gray-100 text-gray-400"
+                          newQ.correct.includes(i) ? "bg-pink-500 text-white" : "bg-gray-100 text-gray-400"
                         }`}
                       >
                         <CheckCircle2 size={18} />
@@ -288,7 +288,7 @@ const AdminQuestions = () => {
                   <input
                     type="text"
                     placeholder="Enter precise answer"
-                    className="input input-bordered w-full border-green-500"
+                    className="input input-bordered w-full border-pink-500"
                     value={newQ.correct[0] || ""}
                     onChange={(e) => setNewQ({ ...newQ, correct: [e.target.value] })}
                   />
@@ -336,7 +336,7 @@ const AdminQuestions = () => {
                   {q.options && q.options.length > 0 && (
                     <div className="grid grid-cols-2 gap-2">
                       {q.options.map((opt, i) => (
-                        <div key={i} className={`text-sm p-2 rounded border ${q.correct.includes(i) ? "bg-green-50 border-green-200 text-green-700 font-bold" : "bg-gray-50 border-gray-100 text-gray-500"}`}>
+                        <div key={i} className={`text-sm p-2 rounded border ${q.correct.includes(i) ? "bg-pink-50 border-pink-200 text-pink-700 font-bold" : "bg-gray-50 border-gray-100 text-gray-500"}`}>
                           {String.fromCharCode(65 + i)}. {opt}
                         </div>
                       ))}
@@ -344,7 +344,7 @@ const AdminQuestions = () => {
                   )}
 
                   {q.qtype === "nat" && (
-                    <div className="text-sm font-bold text-green-700 bg-green-50 p-2 rounded border border-green-200 inline-block">
+                    <div className="text-sm font-bold text-pink-700 bg-pink-50 p-2 rounded border border-pink-200 inline-block">
                       Answer: {q.correct[0]}
                     </div>
                   )}

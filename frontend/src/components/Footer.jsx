@@ -12,6 +12,7 @@ export default function Footer() {
         <Link to="/contact"   className="link link-hover">Contact</Link>
         <Link to="/jobs"      className="link link-hover">Jobs</Link>
         <Link to="/press-kit" className="link link-hover">Press kit</Link>
+        <Link to="/feedback" className="link link-hover">feedback</Link>
       </nav>
 
       {/* Social icons using SVG - no package needed */}

@@ -69,7 +69,7 @@
 //                     href={link.url}
 //                     target="_blank"
 //                     rel="noreferrer"
-//                     className="text-blue-600 hover:underline"
+//                     className="text-pink-600 hover:underline"
 //                   >
 //                     {link.name}
 //                   </a>
@@ -113,8 +113,8 @@ const resources = [
   },
   {
     title: "Reasoning",
-    icon: <BrainCircuit className="text-blue-500" size={16} />,
-    color: "from-blue-50 to-indigo-50",
+    icon: <BrainCircuit className="text-pink-500" size={16} />,
+    color: "from-pink-50 to-indigo-50",
     title: "Reasoning",
     links: [
       {
