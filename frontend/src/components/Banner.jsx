@@ -15,10 +15,10 @@ export default function Banner() {
           afraid to start from zero.
         </p>
         <div className="mt-8 flex gap-4 flex-wrap">
-          <a href="#study" className="btn bg-pink-500 hover:bg-pink-600 text-white px-6">
+          <a href="#study" className="btn bg-pink-400 hover:bg-blue-300 text-white px-6">
             Start Learning
           </a>
-          <a href="#resources" className="btn btn-outline border-pink-400 text-pink-500 hover:bg-pink-50 px-6">
+          <a href="#resources" className="btn btn-outline border-pink-400 text-pink-500 hover:bg-blue-300 px-6">
             View Resources
           </a>
         </div>
